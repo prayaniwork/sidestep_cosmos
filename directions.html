@@ -1,0 +1,435 @@
+<title>Sidestep Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=Unbounded:wght@400;600;800&family=Young+Serif&family=Syne:wght@600;700;800&display=swap">
+<style>
+:root{
+  --bg:#F3F3F1; --surface:#FFFFFF; --ink:#141518; --ink-2:#55585F; --ink-3:#8C8F96; --line:#DCDDDA; --accent:#3B5BFF;
+  --sans:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark; --bg:#0F1012; --surface:#17181B; --ink:#EDEDEA; --ink-2:#A4A6AC; --ink-3:#6E7077; --line:#2A2C31; --accent:#7D93FF; }
+}
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#0F1012; --surface:#17181B; --ink:#EDEDEA; --ink-2:#A4A6AC; --ink-3:#6E7077; --line:#2A2C31; --accent:#7D93FF; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+header.intro{padding-block:56px 28px;display:grid;gap:16px;max-width:760px}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin:0}
+h1{font-size:clamp(2.2rem,5.5vw,3.6rem);line-height:1.02;letter-spacing:-.035em;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:clamp(1.6rem,3.6vw,2.3rem);letter-spacing:-.03em;line-height:1.08;margin:0;font-weight:700;text-wrap:balance}
+h3{font-size:1.1rem;margin:0;letter-spacing:-.01em}
+p{margin:0}
+.lede{font-size:1.12rem;color:var(--ink-2);max-width:62ch}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.toc a{font-family:var(--mono);font-size:.82rem;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px}
+.toc a:hover{border-color:var(--ink-3)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.dir{padding-block:44px;border-top:1px solid var(--line);display:grid;gap:20px}
+.dir-head{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.letter{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-weight:700;font-size:1.4rem;background:var(--ink);color:var(--bg)}
+.dir-head .sub{color:var(--ink-2);max-width:66ch;margin-top:6px}
+.stage{position:relative;height:clamp(380px,56vw,540px);border-radius:22px;overflow:hidden;isolation:isolate}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:pointer}
+.hint{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;padding:5px 10px;border-radius:999px;pointer-events:none;z-index:3}
+.ui{position:absolute;right:18px;top:18px;z-index:3;max-width:min(300px,calc(100% - 36px));pointer-events:auto}
+@media (max-width:560px){.ui{right:12px;top:12px;left:12px;max-width:none}}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:grid;gap:8px;align-content:start}
+.note .k{font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.note ul{margin:0;padding-left:1.1em;display:grid;gap:4px;color:var(--ink-2)}
+.note p{color:var(--ink-2)}
+
+/* ---- A · Clay ---- */
+#a .stage{background:#E9E4F7}
+#a .hint{background:#fff;color:#5B4D8A}
+.ui-clay{font-family:"Fredoka",system-ui,sans-serif;background:#fff;border-radius:28px;padding:18px 20px 20px;box-shadow:0 18px 40px -12px rgba(91,77,138,.35);display:grid;gap:10px;color:#2E2640}
+.ui-clay .pill{justify-self:start;background:#FFE3DF;color:#C2493A;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:600}
+.ui-clay b{font-size:1.45rem;line-height:1.1;font-weight:700}
+.ui-clay .bar{height:12px;border-radius:999px;background:#EEE9FA;overflow:hidden}
+.ui-clay .bar i{display:block;height:100%;width:66%;background:linear-gradient(90deg,#FF8A7A,#FFB36E);border-radius:999px}
+.ui-clay button{font:inherit;font-weight:700;font-size:1.05rem;border:0;border-radius:18px;padding:12px 16px;background:#FF8A7A;color:#fff;box-shadow:0 5px 0 #D8604F;cursor:pointer;transition:transform .1s,box-shadow .1s}
+.ui-clay button:active{transform:translateY(4px);box-shadow:0 1px 0 #D8604F}
+
+/* ---- B · Cosmos ---- */
+#b .stage{background:radial-gradient(ellipse at 50% 60%,#141a3a 0%,#05060D 70%)}
+#b .hint{background:rgba(255,255,255,.08);color:#B9C1FF;border:1px solid rgba(255,255,255,.14)}
+.ui-cosmos{font-family:"Unbounded",system-ui,sans-serif;background:rgba(12,14,30,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(160,170,255,.25);border-radius:18px;padding:16px 18px;color:#E8EAFF;display:grid;gap:10px}
+.ui-cosmos .k{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#8E97E6}
+.ui-cosmos b{font-weight:600;font-size:1.05rem;line-height:1.3}
+.ui-cosmos .sparks{display:flex;gap:6px;flex-wrap:wrap}
+.ui-cosmos .sparks span{font-size:.7rem;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 9px;color:#C9CEFF}
+.ui-cosmos button{font:inherit;font-weight:600;font-size:.82rem;letter-spacing:.04em;color:#fff;border-radius:12px;padding:11px 14px;border:1px solid transparent;background:linear-gradient(#10132a,#10132a) padding-box,linear-gradient(90deg,#FFB86B,#FF5CA8,#6B7BFF) border-box;cursor:pointer}
+
+/* ---- C · Paper ---- */
+#c .stage{background:#D6E2DA}
+#c .hint{background:#F7F4EC;color:#3F5247}
+.ui-paper{font-family:"Young Serif",Georgia,serif;background:#FBF8F1;color:#26322B;padding:18px 20px 20px;border-radius:4px;box-shadow:0 1px 0 rgba(0,0,0,.06),0 14px 26px -14px rgba(38,50,43,.55);transform:rotate(1.6deg);position:relative;display:grid;gap:10px}
+.ui-paper::before{content:"";position:absolute;top:-10px;left:50%;width:74px;height:22px;transform:translateX(-50%) rotate(-3deg);background:rgba(255,214,102,.75);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ui-paper .k{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#6B7D72}
+.ui-paper b{font-weight:400;font-size:1.4rem;line-height:1.15}
+.ui-paper button{justify-self:start;font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:#C8452F;border:2px solid #C8452F;border-radius:6px;padding:8px 12px;transform:rotate(-2deg);cursor:pointer}
+
+/* ---- D · Chrome ---- */
+#d .stage{background:radial-gradient(circle at 30% 20%,#2a2f3a 0%,#0b0c10 65%)}
+#d .hint{background:rgba(255,255,255,.08);color:#DDE3EE;border:1px solid rgba(255,255,255,.18)}
+.ui-chrome{font-family:"Syne",system-ui,sans-serif;background:rgba(255,255,255,.07);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.22);border-radius:26px;padding:18px 20px;color:#F2F4F8;display:grid;gap:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.ui-chrome .k{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#A9B1C2}
+.ui-chrome .big{font-weight:800;font-size:2.6rem;line-height:1;letter-spacing:-.02em;background:linear-gradient(100deg,#9CF6FF,#C8A6FF 40%,#FFB3D9 70%,#FFE9A8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ui-chrome p{color:#C7CDD8;font-size:.95rem}
+.ui-chrome button{justify-self:start;font:inherit;font-weight:700;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;padding:9px 16px;cursor:pointer}
+
+/* ---- loop ---- */
+.loop{padding-block:52px;border-top:1px solid var(--line);display:grid;gap:26px}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;counter-reset:s}
+@media (max-width:900px){.flow{grid-template-columns:1fr}}
+.flow li{list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:6px;align-content:start;position:relative}
+.flow li::before{counter-increment:s;content:counter(s);font-family:var(--mono);font-size:.75rem;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg)}
+.flow li p{color:var(--ink-2);font-size:.94rem}
+.flow{padding:0;margin:0}
+.flow li.hl{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px;display:grid;gap:12px;align-content:start}
+.card ul{margin:0;padding-left:1.1em;display:grid;gap:8px;color:var(--ink-2)}
+.card li b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:.7rem;border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--ink-2);white-space:nowrap}
+.screens{display:flex;flex-wrap:wrap;gap:8px}
+.screens span{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.92rem}
+.screens span small{display:block;color:var(--ink-3);font-size:.78rem}
+.decide{margin-block:10px 70px;background:var(--ink);color:var(--bg);border-radius:22px;padding:26px 28px;display:grid;gap:10px}
+.decide p{opacity:.8;max-width:70ch}
+.decide code{font-family:var(--mono);background:rgba(127,127,127,.2);padding:1px 6px;border-radius:6px}
+.nogl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;font-family:var(--mono);font-size:.85rem;color:#888}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <p class="eyebrow">Sidestep · direction board</p>
+    <h1>Four ways Sidestep could look and feel.</h1>
+    <p class="lede">Each direction below is a live 3D scene. Move your pointer over it and tap the objects. The floating card shows how the app's own screens would look in that style. Under the four directions is the game loop I'm proposing, so ideas stop being notes and turn into something real.</p>
+    <nav class="toc" aria-label="Sections"><a href="#a">A · Clay Playground</a><a href="#b">B · Idea Cosmos</a><a href="#c">C · Paper Workshop</a><a href="#d">D · Liquid Chrome</a><a href="#loop">The loop</a></nav>
+  </header>
+
+  <!-- A -->
+  <section class="dir" id="a">
+    <div class="dir-head"><div class="letter">A</div><div><h2>Clay Playground</h2><p class="sub">Soft, squishy 3D toys in pastel. Tapping things makes them bounce and change colour. Warm and low-pressure, closer to a game you'd happily open every morning than a productivity tool.</p></div></div>
+    <div class="stage" data-scene="clay"><canvas aria-label="3D clay shapes you can tap"></canvas><span class="hint">Tap a shape · move to tilt</span>
+      <div class="ui"><div class="ui-clay"><span class="pill">Today's brief</span><b>Make waiting at the doctor's less awful</b><div class="bar" aria-label="2 of 3 warm-ups done"><i></i></div><button type="button">Continue warm-up</button></div></div></div>
+    <div class="notes">
+      <div class="note"><span class="k">Feels like</span><p>Friendly, tactile, playful. Every tap has a physical response. Your idea world becomes a little toy island that fills up.</p></div>
+      <div class="note"><span class="k">Watch out</span><p>It can read as "for kids" if the copy is too cute. Serious designers may take it less seriously.</p></div>
+      <div class="note"><span class="k">Look at</span><ul><li><a href="https://bruno-simon.com" target="_blank" rel="noopener">Bruno Simon's portfolio</a>, a toy 3D world you drive through</li><li><a href="https://app.spline.design/community" target="_blank" rel="noopener">Spline community</a>, for soft 3D UI objects</li><li>Duolingo's chunky pressable buttons</li></ul></div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="dir" id="b">
+    <div class="dir-head"><div class="letter">B</div><div><h2>Idea Cosmos</h2><p class="sub">Your ideas are stars in a galaxy you build. Every spark you write lights a new point, and connecting sparks draws constellations. This is the most direct picture of "jumping between ideas".</p></div></div>
+    <div class="stage" data-scene="cosmos"><canvas aria-label="3D galaxy where tapping adds a connected star"></canvas><span class="hint">Tap to add a spark · move to orbit</span>
+      <div class="ui"><div class="ui-cosmos"><span class="k">Forge · 3 sparks selected</span><b>Fuse them into one idea</b><div class="sparks"><span>brick as bookend</span><span>clinic × podcast</span><span>curiosity gap</span></div><button type="button">Forge idea</button></div></div></div>
+    <div class="notes">
+      <div class="note"><span class="k">Feels like</span><p>Big, wondrous, and it grows over time. Your galaxy after 30 days looks visibly different from day one, which is a strong reason to come back.</p></div>
+      <div class="note"><span class="k">Watch out</span><p>Dark and glowy can feel like a crypto site if overdone. It needs restrained, readable UI on top of the spectacle.</p></div>
+      <div class="note"><span class="k">Look at</span><ul><li><a href="https://stars.chromeexperiments.com" target="_blank" rel="noopener">100,000 Stars</a> (Chrome Experiments)</li><li><a href="https://obsidian.md" target="_blank" rel="noopener">Obsidian's graph view</a>, where notes link into a web</li><li><a href="https://lusion.co" target="_blank" rel="noopener">Lusion</a>, a WebGL studio, for motion quality</li></ul></div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="dir" id="c">
+    <div class="dir-head"><div class="letter">C</div><div><h2>Paper Workshop</h2><p class="sub">A maker's desk. Sparks are paper cards you deal, flip and pin, and finished ideas become printed posters. Crafted, human and quietly anti-AI in spirit.</p></div></div>
+    <div class="stage" data-scene="paper"><canvas aria-label="3D paper cards you can hover and flip"></canvas><span class="hint">Hover to lift · tap to flip</span>
+      <div class="ui"><div class="ui-paper"><span class="k">Idea No. 014</span><b>The Waiting Room Radio: patients pick the next song while they wait</b><button type="button">Pin to wall</button></div></div></div>
+    <div class="notes">
+      <div class="note"><span class="k">Feels like</span><p>Hands-on and thoughtful. It suits the "no AI, just you" message best, and posters of ideas are easy to share.</p></div>
+      <div class="note"><span class="k">Watch out</span><p>It's the calmest of the four. The "wow" comes from tactile detail, not spectacle.</p></div>
+      <div class="note"><span class="k">Look at</span><ul><li><a href="https://www.monumentvalleygame.com" target="_blank" rel="noopener">Monument Valley</a>, for crafted 3D spaces</li><li>Tearaway (Media Molecule), a world made of papercraft</li><li>Risograph zines and moodboard pin walls</li></ul></div>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="dir" id="d">
+    <div class="dir-head"><div class="letter">D</div><div><h2>Liquid Chrome</h2><p class="sub">A living, iridescent form that reacts to you: it ripples when you move and pulses when you tap. Each finished idea could cast a unique shape from your answers. The trendiest and most "wow on first open" of the four.</p></div></div>
+    <div class="stage" data-scene="chrome"><canvas aria-label="Iridescent morphing 3D form that reacts to taps"></canvas><span class="hint">Move to ripple · tap to pulse</span>
+      <div class="ui"><div class="ui-chrome"><span class="k">Idea cast</span><span class="big">#014</span><p>Made from 3 sparks and 1 hook. No two shapes are the same.</p><button type="button">Add to collection</button></div></div></div>
+    <div class="notes">
+      <div class="note"><span class="k">Feels like</span><p>Premium, futuristic, collectible. A generated shape per idea gives people something to collect.</p></div>
+      <div class="note"><span class="k">Watch out</span><p>Chrome and glass are everywhere right now and will date fastest. It's also the heaviest on older phones.</p></div>
+      <div class="note"><span class="k">Look at</span><ul><li><a href="https://developer.apple.com/design/human-interface-guidelines/materials" target="_blank" rel="noopener">Apple's glass materials</a> (visionOS / Liquid Glass)</li><li><a href="https://stripe.com" target="_blank" rel="noopener">Stripe's</a> animated gradient hero</li><li>Iridescent 3D work on Dribbble and Behance</li></ul></div>
+    </div>
+  </section>
+
+  <!-- LOOP -->
+  <section class="loop" id="loop">
+    <div style="display:grid;gap:12px;max-width:760px"><p class="eyebrow">Proposal · needs your OK</p><h2>The loop: from drills to a real idea, every day</h2>
+      <p class="lede">Right now each drill ends in a note and nothing happens next. This loop gives every session a goal, a finished thing at the end, and a clear stopping point.</p></div>
+    <ol class="flow">
+      <li><h3>Today's brief</h3><p>One small real problem, the same for everyone that day. For example, "Make waiting at the doctor's less awful."</p></li>
+      <li><h3>Warm-up</h3><p>Three quick drills, tuned to the brief. Second Life hands you an object from a waiting room, and Bridge pairs "a clinic" with something random. Every answer becomes a <b>spark</b>.</p></li>
+      <li class="hl"><h3>Forge</h3><p>Pick 2–3 sparks and smash them together in 3D. This is the wow moment. Add one <b>hook</b> from your Why I Stopped notes so the idea grabs people.</p></li>
+      <li><h3>Shape it</h3><p>Three plain lines: what it's called, who it's for, how it works. Out comes an idea card you can share.</p></li>
+      <li><h3>Place it</h3><p>The idea joins your 3D world, and you're done for the day. It takes about 10 minutes, with no endless feed.</p></li>
+    </ol>
+    <div class="two">
+      <div class="card"><h3>Why people come back</h3><ul>
+        <li><b>Your world grows.</b> Every idea adds something permanent you can see and explore. Day 30 looks nothing like day 1.</li>
+        <li><b>One brief a day, like Wordle.</b> It's new every morning, finished in minutes, and easy to compare with friends.</li>
+        <li><b>Four skill rings</b> that fill as you play: Range (Far Apart), Reframe (Second Life), Connect (Bridge) and Insight (Why I Stopped).</li>
+        <li><b>Unlocks.</b> New lenses, object packs and rare pairings arrive as you level up.</li>
+        <li><b>Sunday gallery.</b> Pick your best idea of the week and it becomes a poster you can share.</li>
+      </ul></div>
+      <div class="card"><h3>How notes turn into ideas</h3><ul>
+        <li><b>Sparks</b> are the raw answers from drills. They're the ingredients, not the output.</li>
+        <li><b>Hooks</b> are your Why I Stopped notes. Log them any time you notice something in the wild. In the Forge they become the part of an idea that grabs people.</li>
+        <li><b>Ideas</b> are forged from sparks plus a hook. That's the real output, and each one has a name, an audience and a mechanism.</li>
+        <li>Your sketchbook becomes your <b>world</b>: ideas you can revisit, remix, or forge again with new sparks.</li>
+      </ul></div>
+    </div>
+    <div class="card"><h3>It becomes an app, not a one-pager</h3><p style="color:var(--ink-2)">Separate screens with 3D transitions between them:</p>
+      <div class="screens"><span>Your world<small>home, the 3D space</small></span><span>Today<small>brief + progress</small></span><span>Warm-up<small>the 4 drills</small></span><span>Forge<small>fuse sparks</small></span><span>Field notes<small>Why I Stopped, any time</small></span><span>Gallery<small>ideas + weekly best</small></span><span>Profile<small>skill rings, streak, unlocks</small></span></div>
+    </div>
+    <div class="decide"><h3 style="font-size:1.3rem">What I need from you</h3>
+      <p>1. A direction, as a letter (<code>A</code>, <code>B</code>, <code>C</code> or <code>D</code>) or a mix, like <code>B's world with C's cards</code>.</p>
+      <p>2. A yes or changes on the loop above. Once both are settled, I'll build the full app.</p></div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SPEED = reduce ? .25 : 1;
+
+function stage(el, init){
+  const canvas = el.querySelector('canvas');
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true}); }
+  catch (e) { el.insertAdjacentHTML('beforeend', '<div class="nogl">This browser could not start 3D graphics.</div>'); return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, .1, 200);
+  const ptr = {x:0, y:0, tx:0, ty:0, nx:0, ny:0, over:false};
+  const ctx = {renderer, scene, camera, ptr, t:0};
+  const api = init(ctx) || {};
+  const size = () => { const w = el.clientWidth, h = el.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); api.resize && api.resize(w, h); };
+  size(); new ResizeObserver(size).observe(el);
+  const toN = e => { const r = canvas.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height * 2 - 1)]; };
+  canvas.addEventListener('pointermove', e => { const [x, y] = toN(e); ptr.tx = x; ptr.ty = y; ptr.nx = x; ptr.ny = y; ptr.over = true; });
+  canvas.addEventListener('pointerleave', () => { ptr.tx = 0; ptr.ty = 0; ptr.over = false; });
+  canvas.addEventListener('pointerdown', e => { const [x, y] = toN(e); ptr.nx = x; ptr.ny = y; api.tap && api.tap(new THREE.Vector2(x, y)); });
+  let vis = false, running = false, last = 0;
+  const loop = now => {
+    if (!vis) { running = false; return; }
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    ctx.t += dt * SPEED;
+    ptr.x += (ptr.tx - ptr.x) * .07; ptr.y += (ptr.ty - ptr.y) * .07;
+    api.update && api.update(dt, ctx.t);
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+  };
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis && !running) { running = true; last = performance.now(); requestAnimationFrame(loop); } }).observe(el);
+  api.update && api.update(0, 0); renderer.render(scene, camera);
+}
+const ray = new THREE.Raycaster();
+
+/* ---------------- A · Clay ---------------- */
+function clay({renderer, scene, camera, ptr}){
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  camera.position.set(0, 1.4, 8); camera.lookAt(0, 0, 0);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xcfc3f5, .75));
+  const sun = new THREE.DirectionalLight(0xffffff, .95); sun.position.set(3, 6, 4); sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024); Object.assign(sun.shadow.camera, {left:-6, right:6, top:6, bottom:-6}); scene.add(sun);
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({opacity:.16}));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = -1.25; ground.receiveShadow = true; scene.add(ground);
+  const palette = [0xFF8A7A, 0xFFD36E, 0x7ED9B5, 0x8EC5FF, 0xB9A2FF, 0xFFA8D2];
+  const geos = [
+    new THREE.SphereGeometry(.72, 48, 32), new THREE.TorusGeometry(.5, .24, 32, 64), new THREE.CylinderGeometry(.46, .46, .95, 48),
+    new THREE.ConeGeometry(.6, 1.1, 48), new THREE.TorusKnotGeometry(.38, .15, 128, 24), new THREE.SphereGeometry(.45, 40, 28)
+  ];
+  const xs = [-3, -1.8, -.6, .6, 1.8, 3], group = new THREE.Group(); scene.add(group);
+  const objs = geos.map((g, i) => {
+    const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({color:palette[i], roughness:.82, metalness:0}));
+    m.castShadow = true; m.position.set(xs[i], 0, (i % 2 ? -.6 : .4)); m.userData = {base:m.position.y, hop:-1, spin:(Math.random() - .5) * .6, ci:i};
+    group.add(m); return m;
+  });
+  return {
+    update(dt, t){
+      group.rotation.y = ptr.x * .45; group.rotation.x = -ptr.y * .12;
+      objs.forEach((m, i) => {
+        const u = m.userData; let y = u.base + Math.sin(t * 1.3 + i) * .12, sy = 1, sxz = 1;
+        if (u.hop >= 0) { u.hop += dt * 1.6; const p = Math.min(u.hop, 1); y += Math.sin(p * Math.PI) * 1.1; sy = 1 + Math.sin(p * Math.PI) * .22;
+          if (p > .82) { const q = (p - .82) / .18; sy = 1 - Math.sin(q * Math.PI) * .3; sxz = 1 + Math.sin(q * Math.PI) * .18; }
+          if (u.hop >= 1) u.hop = -1; }
+        m.position.y = y; m.scale.set(sxz, sy, sxz); m.rotation.y += dt * u.spin + (u.hop >= 0 ? dt * 5 : 0); m.rotation.x = Math.sin(t * .7 + i) * .15;
+      });
+    },
+    tap(v){ ray.setFromCamera(v, camera); const hit = ray.intersectObjects(objs)[0]; if (!hit) return; const m = hit.object;
+      if (m.userData.hop < 0) m.userData.hop = 0; m.userData.ci = (m.userData.ci + 1) % palette.length; m.material.color.setHex(palette[m.userData.ci]); }
+  };
+}
+
+/* ---------------- B · Cosmos ---------------- */
+function glowTex(){
+  const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+  const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(.2, 'rgba(255,255,255,.55)'); r.addColorStop(.5, 'rgba(255,255,255,.12)'); r.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = r; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+}
+function cosmos({scene, camera, ptr}){
+  camera.position.set(0, 3.4, 8.2); camera.lookAt(0, 0, 0);
+  const world = new THREE.Group(); scene.add(world);
+  const N = 7000, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+  const cin = new THREE.Color(0xFFB86B), cout = new THREE.Color(0x5B6BFF), tmp = new THREE.Color();
+  for (let i = 0; i < N; i++) {
+    const r = Math.pow(Math.random(), 1.6) * 6.5, arm = (i % 3) * Math.PI * 2 / 3, a = arm + r * .75;
+    const sp = Math.pow(Math.random(), 3) * (Math.random() < .5 ? 1 : -1) * .9;
+    pos[i * 3] = Math.cos(a) * r + sp; pos[i * 3 + 1] = (Math.random() - .5) * .35 * (1 - r / 7); pos[i * 3 + 2] = Math.sin(a) * r + Math.pow(Math.random(), 3) * (Math.random() < .5 ? 1 : -1) * .9;
+    tmp.copy(cin).lerp(cout, r / 6.5); col[i * 3] = tmp.r; col[i * 3 + 1] = tmp.g; col[i * 3 + 2] = tmp.b;
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const galaxy = new THREE.Points(g, new THREE.PointsMaterial({size:.035, vertexColors:true, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending}));
+  world.add(galaxy);
+  const tex = glowTex(), hues = [0xFFB86B, 0xFF5CA8, 0x8C9BFF, 0x7FF0D2, 0xFFE27A];
+  const nodes = [], lines = [];
+  const lineMat = new THREE.LineBasicMaterial({color:0xAFB8FF, transparent:true, opacity:.45, blending:THREE.AdditiveBlending, depthWrite:false});
+  function addNode(p, grow){
+    const color = hues[nodes.length % hues.length];
+    const core = new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 12), new THREE.MeshBasicMaterial({color:0xffffff}));
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, color, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false}));
+    halo.scale.setScalar(.9); core.add(halo); core.position.copy(p); world.add(core);
+    const n = {mesh:core, halo, born:grow ? 0 : 1, phase:Math.random() * 6};
+    const near = nodes.slice().sort((a, b) => a.mesh.position.distanceTo(p) - b.mesh.position.distanceTo(p)).slice(0, 2);
+    near.forEach(o => { const lg = new THREE.BufferGeometry().setFromPoints([o.mesh.position.clone(), o.mesh.position.clone()]);
+      const L = new THREE.Line(lg, lineMat); world.add(L); lines.push({L, a:o.mesh.position.clone(), b:p.clone(), k:grow ? 0 : 1}); });
+    nodes.push(n);
+  }
+  [[-2.2, .3, -1], [1.6, .2, -1.8], [.4, .5, 1.4], [-1, -.1, 2.4], [2.8, .1, .9], [-3.1, .2, 1.1], [.2, .3, -3]].forEach(p => addNode(new THREE.Vector3(...p), false));
+  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), hitP = new THREE.Vector3();
+  return {
+    update(dt, t){
+      world.rotation.y += dt * .06 * SPEED + ptr.x * dt * .5; world.rotation.x = ptr.y * .18;
+      nodes.forEach(n => { if (n.born < 1) n.born = Math.min(1, n.born + dt * 1.8); const b = n.born < 1 ? 1 + Math.sin(n.born * Math.PI) * 2.2 : 1;
+        n.halo.scale.setScalar((.8 + Math.sin(t * 2 + n.phase) * .12) * b); });
+      lines.forEach(l => { if (l.k < 1) { l.k = Math.min(1, l.k + dt * 1.6); const arr = l.L.geometry.attributes.position.array; const e = l.a.clone().lerp(l.b, l.k);
+        arr[3] = e.x; arr[4] = e.y; arr[5] = e.z; l.L.geometry.attributes.position.needsUpdate = true; } else if (!l.done) { const arr = l.L.geometry.attributes.position.array; arr[3] = l.b.x; arr[4] = l.b.y; arr[5] = l.b.z; l.L.geometry.attributes.position.needsUpdate = true; l.done = true; } });
+    },
+    tap(v){ ray.setFromCamera(v, camera); if (!ray.ray.intersectPlane(plane, hitP)) return; if (hitP.length() > 7) hitP.setLength(6.5);
+      const local = world.worldToLocal(hitP.clone()); local.y = (Math.random() - .5) * .6; addNode(local, true); }
+  };
+}
+
+/* ---------------- C · Paper ---------------- */
+function roundedShape(w, h, r){ const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+  s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; }
+function cardGeo(w, h){ const g = new THREE.ShapeGeometry(roundedShape(w, h, .12), 8); const uv = g.attributes.uv, p = g.attributes.position;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (p.getX(i) + w / 2) / w, (p.getY(i) + h / 2) / h); return g; }
+function wrapText(g, text, x, y, maxW, lh){ const words = text.split(' '); let line = ''; for (const w of words) { const t = line ? line + ' ' + w : w; if (g.measureText(t).width > maxW && line) { g.fillText(line, x, y); line = w; y += lh; } else line = t; } g.fillText(line, x, y); }
+function cardTex(bg, ink, kind, text, back){
+  const c = document.createElement('canvas'); c.width = 400; c.height = 575; const g = c.getContext('2d');
+  g.fillStyle = bg; g.fillRect(0, 0, 400, 575);
+  for (let i = 0; i < 1800; i++) { g.fillStyle = `rgba(0,0,0,${Math.random() * .05})`; g.fillRect(Math.random() * 400, Math.random() * 575, 1.5, 1.5); }
+  g.fillStyle = ink;
+  if (back) { g.globalAlpha = .18; for (let y = -575; y < 575; y += 26) { g.save(); g.translate(0, y); g.rotate(.5); g.fillRect(0, 0, 900, 9); g.restore(); } g.globalAlpha = 1;
+    g.font = '44px "Young Serif", Georgia, serif'; g.textAlign = 'center'; g.fillText('Sidestep', 200, 300); }
+  else { g.font = '500 22px "Geist Mono", monospace'; g.fillText(kind.toUpperCase(), 32, 56); g.fillRect(32, 76, 336, 3);
+    g.font = '36px "Young Serif", Georgia, serif'; wrapText(g, text, 32, 146, 330, 46); }
+  const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t;
+}
+function paper({renderer, scene, camera, ptr}){
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.outputEncoding = THREE.sRGBEncoding;
+  camera.position.set(0, -.6, 7.4); camera.lookAt(0, .1, 0);
+  scene.add(new THREE.AmbientLight(0xffffff, .62));
+  const sun = new THREE.DirectionalLight(0xffffff, .6); sun.position.set(-3, 4, 6); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024);
+  Object.assign(sun.shadow.camera, {left:-6, right:6, top:6, bottom:-6}); sun.shadow.radius = 4; scene.add(sun);
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshLambertMaterial({color:0xD6E2DA})); wall.position.z = -.4; wall.receiveShadow = true; scene.add(wall);
+  const data = [
+    ['#FBF8F1', '#26322B', 'Spark', 'Use a brick as a bookend for giants'],
+    ['#FFD666', '#26322B', 'Lens', 'Shrink it to ant size'],
+    ['#C8452F', '#FBF8F1', 'Bridge', 'A clinic runs like a podcast queue'],
+    ['#2F5D50', '#FBF8F1', 'Hook', 'Curiosity gap: show half, hide half'],
+    ['#9DB8F2', '#1E2A44', 'Idea', 'Waiting Room Radio']
+  ];
+  const W = 1.55, H = 2.23, geo = cardGeo(W, H), cards = [];
+  data.forEach((d, i) => {
+    const holder = new THREE.Group(), flip = new THREE.Group(); holder.add(flip);
+    const front = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({map:cardTex(d[0], d[1], d[2], d[3])})); front.castShadow = true;
+    const back = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({map:cardTex(d[0], d[1], '', '', true)})); back.rotation.y = Math.PI; back.position.z = -.004;
+    flip.add(front, back);
+    const k = i - 2; holder.position.set(k * 1.22, -Math.abs(k) * .18 - .1, i * .06); holder.rotation.z = -k * .13;
+    holder.userData = {base:holder.position.clone(), lift:0, flipT:0, flipTo:0, flip, i};
+    front.userData.card = back.userData.card = holder;
+    scene.add(holder); cards.push(holder);
+  });
+  const pickables = cards.flatMap(c => c.userData.flip.children);
+  let hover = null;
+  return {
+    update(dt, t){
+      camera.position.x = ptr.x * 1.1; camera.position.y = -.6 + ptr.y * .6; camera.lookAt(0, .1, 0);
+      if (ptr.over) { ray.setFromCamera(new THREE.Vector2(ptr.nx, ptr.ny), camera); const h = ray.intersectObjects(pickables)[0]; hover = h ? h.object.userData.card : null; } else hover = null;
+      cards.forEach(c => { const u = c.userData; u.lift += ((c === hover ? 1 : 0) - u.lift) * .14;
+        c.position.set(u.base.x, u.base.y + u.lift * .45 + Math.sin(t * 1.1 + u.i) * .03, u.base.z + u.lift * .7);
+        u.flipT += (u.flipTo - u.flipT) * .1; u.flip.rotation.y = u.flipT; u.flip.rotation.x = Math.sin(u.flipT) * .12; });
+    },
+    tap(v){ ray.setFromCamera(v, camera); const h = ray.intersectObjects(pickables)[0]; if (h) h.object.userData.card.userData.flipTo += Math.PI; }
+  };
+}
+
+/* ---------------- D · Chrome ---------------- */
+const VERT = `
+uniform float uTime; uniform float uPulse; uniform vec2 uPtr;
+varying vec3 vN; varying vec3 vP; varying float vD;
+void main(){
+  vec3 p = position; float t = uTime * .7;
+  float d = sin(p.x*2.1 + t) * sin(p.y*2.6 + t*1.3) * sin(p.z*2.3 + t*.8);
+  d += .55 * sin(p.x*4.2 - t*1.6 + p.y*3.1) * sin(p.z*3.6 + t);
+  vec3 dir = normalize(vec3(uPtr, .6));
+  float near = pow(max(dot(normalize(position), dir), 0.), 4.);
+  float amp = .16 + uPulse * .38 + near * length(uPtr) * .35;
+  p += normal * d * amp;
+  vD = d;
+  vN = normalize(normalMatrix * normal);
+  vec4 mv = modelViewMatrix * vec4(p, 1.);
+  vP = mv.xyz; gl_Position = projectionMatrix * mv;
+}`;
+const FRAG = `
+uniform float uTime; varying vec3 vN; varying vec3 vP; varying float vD;
+void main(){
+  vec3 n = normalize(vN); vec3 v = normalize(-vP);
+  float f = pow(1. - max(dot(n, v), 0.), 2.);
+  float h = f * 1.3 + vD * .9 + uTime * .05 + n.y * .3;
+  vec3 iri = .55 + .45 * cos(6.28318 * (vec3(.0, .33, .67) + h));
+  vec3 chrome = vec3(.07, .08, .11) + vec3(.95) * pow(max(n.y * .5 + .5, 0.), 7.) + vec3(.35) * pow(max(-n.x * .5 + .5, 0.), 9.);
+  vec3 col = mix(chrome, iri, .3 + f * .7);
+  col += pow(f, 3.) * .55;
+  gl_FragColor = vec4(col, 1.);
+}`;
+function chrome({camera, scene, ptr}){
+  camera.position.set(0, 0, 6.2);
+  const uni = {uTime:{value:0}, uPulse:{value:0}, uPtr:{value:new THREE.Vector2()}};
+  const mat = new THREE.ShaderMaterial({vertexShader:VERT, fragmentShader:FRAG, uniforms:uni});
+  const blob = new THREE.Mesh(new THREE.SphereGeometry(1.45, 180, 180), mat); scene.add(blob);
+  const moons = [0, 1, 2].map(i => { const m = new THREE.Mesh(new THREE.SphereGeometry(.22 + i * .05, 64, 64), mat); scene.add(m); return m; });
+  return {
+    resize(w){ blob.position.x = w < 560 ? 0 : -.9; },
+    update(dt, t){
+      uni.uTime.value = t; uni.uPulse.value *= Math.pow(.2, dt * 2.2); uni.uPtr.value.set(ptr.x, ptr.y);
+      blob.rotation.y = t * .15 + ptr.x * .6; blob.rotation.x = -ptr.y * .4;
+      moons.forEach((m, i) => { const a = t * (.5 + i * .18) + i * 2.1, r = 2.1 + i * .35;
+        m.position.set(blob.position.x + Math.cos(a) * r, Math.sin(a * 1.3) * .7, Math.sin(a) * r * .6); });
+    },
+    tap(){ uni.uPulse.value = 1; }
+  };
+}
+
+const SCENES = {clay, cosmos, paper, chrome};
+const boot = () => document.querySelectorAll('[data-scene]').forEach(el => {
+  if (!window.THREE) { el.insertAdjacentHTML('beforeend', '<div class="nogl">3D library failed to load.</div>'); return; }
+  stage(el, SCENES[el.dataset.scene]);
+});
+(document.fonts && document.fonts.load ? Promise.all([document.fonts.load('40px "Young Serif"'), document.fonts.load('22px "Geist Mono"')]).catch(() => {}) : Promise.resolve()).then(boot);
+</script>

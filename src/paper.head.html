@@ -1,0 +1,41 @@
+<title>Sidestep Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Paper Workshop: a deliberately light, single-theme maker's wall */
+:root{
+  color-scheme:light;
+  --bg:#D6E2DA; --veil:rgba(214,226,218,.74);
+  --panel-bg:#FBF8F1; --panel-border:0 solid transparent; --panel-shadow:0 1px 0 rgba(38,50,43,.06),0 18px 32px -20px rgba(38,50,43,.6); --panel-blur:none;
+  --ink:#26322B; --ink-2:#56655C; --ink-3:#86938B;
+  --accent:#C8452F; --on-accent:#FBF8F1; --accent-soft:rgba(200,69,47,.18); --danger:#C8452F;
+  --field-bg:#FFFFFF; --field-border:1.5px solid #D5CEBF;
+  --chip-bg:transparent; --chip-border:1.5px solid #26322B;
+  --btn-bg:#FBF8F1; --btn-border:1.5px solid #26322B;
+  --sub-bg:#F3EEE3; --sub-border:0 solid transparent; --hair:1.5px dashed #D5CEBF;
+  --track:#E6DFD0; --tab-on:#EDE6D6; --scrim:rgba(38,50,43,.45);
+  --toast-bg:#26322B; --toast-ink:#FBF8F1;
+  --radius:4px; --radius-sm:4px; --radius-btn:5px; --radius-chip:5px; --radius-tab:8px;
+  --display:"Young Serif", "Iowan Old Style", Georgia, serif; --display-w:400; --display-ls:-.01em;
+  --body:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --c-far:#FFD666; --on-far:#26322B; --c-second:#EE8C6E; --on-second:#26322B; --c-bridge:#9DB8F2; --on-bridge:#1E2A44; --c-notes:#2F5D50; --on-notes:#FBF8F1;
+  --w1:#FFD666; --on-w1:#26322B; --w2:#EE8C6E; --on-w2:#26322B; --w3:#9DB8F2; --on-w3:#1E2A44; --w4:#B7D3A8; --on-w4:#26322B;
+  --word-shadow:2px 3px 0 rgba(38,50,43,.16); --stamp-shadow:0 10px 18px -10px rgba(38,50,43,.6); --hint-shadow:none;
+  --ic-bg:var(--ic); --ic-ink:#26322B; --ic-border:0 solid transparent; --ic-shadow:0 1px 0 rgba(38,50,43,.08),0 16px 26px -16px rgba(38,50,43,.7);
+}
+.panel::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.2 0 0 0 0 0.17 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.w-card{transform:rotate(-.6deg)}
+.w-card::before,.intro::before{content:"";position:absolute;top:-11px;left:50%;width:84px;height:24px;transform:translateX(-50%) rotate(-3deg);background:rgba(255,214,102,.8);box-shadow:0 1px 2px rgba(0,0,0,.08);z-index:2}
+.btn.primary{box-shadow:0 3px 0 #8E2E1E}
+.btn.primary:not(:disabled):active{transform:translateY(2px);box-shadow:0 1px 0 #8E2E1E}
+.stamp{border:2px dashed rgba(38,50,43,.35);transform:rotate(-6deg)}
+.idea-card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.2 0 0 0 0 0.17 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.idea-card:not(.mini){transform:rotate(.5deg)}
+.idea-card.mini:hover{transform:rotate(-1deg) translateY(-2px)}
+.idea-card.mini{transition:transform .2s}
+.step.is-done .num{border:0}
+.tabbar{background:#FBF8F1}
+</style>

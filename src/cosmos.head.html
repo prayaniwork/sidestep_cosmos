@@ -1,0 +1,75 @@
+<title>Sidestep Cosmos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600;700&display=swap">
+<style>
+/* Idea Cosmos: a deliberately dark, single-theme world.
+   One starlight family (gold, lilac, periwinkle, silver) instead of separate hues. */
+:root{
+  color-scheme:dark;
+  --bg:#05060D; --veil:radial-gradient(ellipse at 50% 45%,rgba(5,6,13,.86),rgba(5,6,13,.96));
+  --panel-bg:#0D0E1C; --panel-border:1px solid rgba(214,218,255,.09); --panel-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 30px 70px -30px rgba(0,0,0,.9); --panel-blur:none;
+  --ink:#EDECF7; --ink-2:#B3B4CC; --ink-3:#7D7F9C;
+  --accent:#F1D8A6; --on-accent:#17120A; --accent-soft:rgba(241,216,166,.18); --danger:#F0A7B4;
+  --field-bg:#080914; --field-border:1px solid rgba(214,218,255,.12);
+  --chip-bg:rgba(237,236,247,.03); --chip-border:1px solid rgba(214,218,255,.14);
+  --btn-bg:rgba(237,236,247,.05); --btn-border:1px solid rgba(214,218,255,.16);
+  --sub-bg:rgba(237,236,247,.025); --sub-border:1px solid rgba(214,218,255,.08); --hair:1px solid rgba(214,218,255,.08);
+  --track:rgba(237,236,247,.08); --tab-on:rgba(237,236,247,.08); --scrim:rgba(3,4,10,.86);
+  --toast-bg:#15172B; --toast-ink:#EDECF7;
+  --radius:18px; --radius-sm:12px; --radius-btn:12px; --radius-chip:999px; --radius-tab:18px;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif; --display-w:400; --display-ls:-.015em;
+  --body:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* starlight tints: same lightness, gentle hue shifts */
+  --c-far:#F1D8A6; --on-far:#17120A; --c-second:#D3C4F1; --on-second:#15101F; --c-bridge:#B4C0F2; --on-bridge:#0E1226; --c-notes:#BBDCE0; --on-notes:#0B1A1C;
+  --w1:#F1D8A6; --on-w1:#EDECF7; --w2:#D3C4F1; --on-w2:#EDECF7; --w3:#B4C0F2; --on-w3:#EDECF7; --w4:#BBDCE0; --on-w4:#EDECF7;
+  --word-shadow:none; --stamp-shadow:0 0 60px -12px rgba(241,216,166,.55); --hint-shadow:0 1px 12px rgba(0,0,0,.95);
+  --ring:var(--accent);
+  --ic-bg:#0A0B18; --ic-ink:#EDECF7; --ic-border:1px solid transparent; --ic-shadow:0 40px 90px -40px rgba(0,0,0,1),0 0 70px -40px var(--ic);
+}
+h1,h2{font-style:italic}
+/* two families only: labels that used a mono face now use Geist, medium weight, with even-width digits */
+.eyebrow,.stat,.group-l,.ic-top,.tcard .head,.dots span,.clock,.ring .sub,.tally .v,.w-hint,.prog span,.stamp span,.how li::before,.nstep .lbl i,.uses .n,.uses .tag,.x-mark{font-weight:500;font-variant-numeric:tabular-nums}
+h1{font-size:clamp(2.2rem,6.2vw,3.3rem)}
+.brand{font-style:italic}
+.eyebrow{color:#9294B5}
+.btn.primary{background:linear-gradient(180deg,#F6E3BC,#E9CB93);box-shadow:0 0 0 1px rgba(255,236,200,.35) inset,0 10px 30px -12px rgba(241,216,166,.55)}
+.btn:not(.primary):not(:disabled):hover{border-color:rgba(214,218,255,.3);background:rgba(237,236,247,.08)}
+.chip{transition:background .3s,border-color .3s,color .3s}
+.chip[aria-pressed="true"]{background:rgba(241,216,166,.12);color:#FFF6E4;border-color:rgba(241,216,166,.55);box-shadow:0 0 18px -6px rgba(241,216,166,.5)}
+.w-card{background:#0B0C1A}
+.prog span.on::before{background:linear-gradient(90deg,#E9CB93,#F6E3BC);box-shadow:0 0 10px rgba(241,216,166,.45)}
+.step.is-done .num{background:rgba(241,216,166,.14);color:#F6E3BC;border:1px solid rgba(241,216,166,.5)}
+.dots i.on{background:#F1D8A6;border-color:#F1D8A6;box-shadow:0 0 8px rgba(241,216,166,.6)}
+.field{background:#080914}
+.word{background:#0E1020;color:var(--ink);border:1px solid color-mix(in srgb,var(--wc) 45%,transparent)}
+.word::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--wc);box-shadow:0 0 10px 1px var(--wc);margin-right:4px}
+.word.anchor::before{display:none}
+.word button{opacity:.55}
+.lens{background:#12142A;color:var(--ink);border:1px solid rgba(211,196,241,.35)}
+.lens .btn{background:rgba(237,236,247,.06);color:var(--ink);border:1px solid rgba(214,218,255,.18)}
+.uses li{background:#0E1020}
+.uses .tag{background:rgba(211,196,241,.14);color:#E6DDFA}
+.pair .side{background:#0E1020;color:var(--ink);border:1px solid rgba(214,218,255,.14);font-style:italic}
+.pair .a{box-shadow:0 0 50px -24px #B4C0F2 inset}
+.pair .b{box-shadow:0 0 50px -24px #D3C4F1 inset}
+.stamp{background:radial-gradient(circle,#1A1B30,#0B0C1A);color:#F6E3BC;border:1px solid rgba(241,216,166,.45)}
+.ing.hook,.mtags span{background:rgba(187,220,224,.12);color:#D6EEF0;border:1px solid rgba(187,220,224,.35)}
+.tally .fill{background:linear-gradient(90deg,#BBDCE0,#F1D8A6)}
+.unlocks li:not(.locked) .ico{background:rgba(241,216,166,.14);color:#F6E3BC}
+.warn{border-color:rgba(240,167,180,.45)}
+.forge-bar{background:#0B0C1A;border-color:rgba(241,216,166,.22)}
+/* premium idea card */
+.idea-card{background:linear-gradient(#0A0B18,#0A0B18) padding-box,linear-gradient(145deg,rgba(241,216,166,.55),rgba(180,192,242,.14) 35%,rgba(211,196,241,.12) 65%,rgba(241,216,166,.42)) border-box;border:1px solid transparent}
+.idea-card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(520px circle at var(--mx,30%) var(--my,0%),rgba(255,248,230,.07),transparent 45%)}
+.idea-card .ic-top{color:#A9ABC8;opacity:1}
+.idea-card h2,.idea-card h3{font-style:italic}
+.idea-card h2{font-size:clamp(1.7rem,4.4vw,2.3rem)}
+.idea-card .ingredients .ing{border-color:rgba(214,218,255,.18);color:#C9CAE0}
+.idea-card .ingredients .ing.hook{border-color:rgba(187,220,224,.4);color:#D6EEF0}
+.ic-art{border-bottom:1px solid rgba(214,218,255,.08)}
+.idea-card.mini{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
+.idea-card.mini:hover{transform:translateY(-3px);box-shadow:0 30px 60px -30px rgba(0,0,0,1),0 0 60px -30px var(--ic)}
+.star-label{font-style:italic;color:#F4F3FB}
+.star-label.on{font-size:1.05rem}
+</style>
