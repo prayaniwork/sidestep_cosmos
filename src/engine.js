@@ -96,6 +96,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const touchUI = matchMedia('(hover: none) and (pointer: coarse)').matches;
+const softFocus = el => { if (el && !touchUI) el.focus({preventScroll:true}); };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const fmt = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -392,7 +394,7 @@ function drillFar(mode){
     <form class="entry" id="entry" autocomplete="off"><label for="far-in" class="sr">Next word</label><input class="input" id="far-in" maxlength="28" placeholder="Type a word and press Enter"><button class="btn primary" id="far-add">Add</button></form>
     <div class="row"><p class="small grow">We only catch obvious pairs, like sun and moon. You decide the rest.</p><button class="btn primary" id="far-done" disabled>Finish</button></div>`;
   startClock($('#clock'), st.t0);
-  const input = $('#far-in'); input.focus();
+  const input = $('#far-in'); softFocus(input);
   const all = () => anchor ? [anchor, ...st.words] : st.words;
   const pairs = () => { const a = all(), out = []; for (let i = 0; i < a.length; i++) for (let j = i + 1; j < a.length; j++) { const r = relate(a[i], a[j]); if (r) out.push([i, j, r]); } return out; };
   function lines(){
@@ -426,7 +428,7 @@ function drillFar(mode){
     st.meta[w] = {c:st.words.length % 4 + 1, rot:(Math.random() * 8 - 4).toFixed(1), size:(1.05 + Math.random() * .55).toFixed(2), dy:Math.round(Math.random() * 20 - 10)};
     st.words.push(w); input.value = ''; World.spark('far'); draw(w); if (!input.disabled) input.focus();
   };
-  $('#cloud').onclick = ev => { const b = ev.target.closest('[data-rm]'); if (!b) return; st.words.splice(+b.dataset.rm, 1); draw(); input.focus(); };
+  $('#cloud').onclick = ev => { const b = ev.target.closest('[data-rm]'); if (!b) return; st.words.splice(+b.dataset.rm, 1); draw(); softFocus(input); };
   $('#far-done').onclick = () => {
     const near = pairs().length, words = st.words.slice();
     addSparks(words, 'far', mode === 'daily');
@@ -448,15 +450,15 @@ function drillSecond(mode){
     <ol class="uses" id="uses"></ol>
     <form class="entry" id="entry" autocomplete="off"><label for="use-in" class="sr">A new use</label><input class="input" id="use-in" maxlength="120" placeholder="Use it as…"><button class="btn primary">Add</button></form>
     <div class="row end"><button class="btn primary" id="done" disabled>Finish</button></div>`;
-  const input = $('#use-in'); input.focus();
+  const input = $('#use-in'); softFocus(input);
   startClock($('#clock'), st.t0, () => { const b = $('#lens-btn'); if (b) b.classList.toggle('pulse', Date.now() - st.last > 20000); });
   function drawLens(){
     const slot = $('#lens-slot');
     if (!st.lens) { slot.innerHTML = `<button class="btn" id="lens-btn">Stuck? Get a hint</button>`; $('#lens-btn').onclick = nextLens; return; }
     slot.innerHTML = `<div class="lens" aria-live="polite"><span class="eyebrow" style="color:inherit;opacity:.8">Hint</span><b>${esc(st.lens[0])}</b><span>${esc(st.lens[1])}</span><div class="row"><button class="btn sm" id="lens-next">Another hint</button><button class="btn sm" id="lens-off">Hide hint</button></div></div>`;
-    $('#lens-next').onclick = nextLens; $('#lens-off').onclick = () => { st.lens = null; drawLens(); input.focus(); };
+    $('#lens-next').onclick = nextLens; $('#lens-off').onclick = () => { st.lens = null; drawLens(); softFocus(input); };
   }
-  function nextLens(){ st.lens = st.deck[st.lp++ % st.deck.length]; st.last = Date.now(); drawLens(); input.focus(); }
+  function nextLens(){ st.lens = st.deck[st.lp++ % st.deck.length]; st.last = Date.now(); drawLens(); softFocus(input); }
   function draw(){
     $('#dots').innerHTML = dots(Math.min(st.uses.length, 10), 10);
     $('#uses').innerHTML = st.uses.map((u, i) => `<li><span class="n">${i + 1}</span><span class="t">${esc(u.text)}</span>${u.lens ? '<span class="tag">hint</span>' : ''}<button class="x" data-rm="${i}" aria-label="Remove">✕</button></li>`).join('');
@@ -466,7 +468,7 @@ function drillSecond(mode){
   }
   draw(); drawLens();
   const r = $('#reroll');
-  if (r) r.onclick = () => { let o; do { o = pick(pool); } while (o === st.obj); st.obj = o; $('#obj-name').textContent = o[0]; $('#usually').innerHTML = `Usually used for <s>${esc(o[1])}</s>. What else could it do?`; input.focus(); };
+  if (r) r.onclick = () => { let o; do { o = pick(pool); } while (o === st.obj); st.obj = o; $('#obj-name').textContent = o[0]; $('#usually').innerHTML = `Usually used for <s>${esc(o[1])}</s>. What else could it do?`; softFocus(input); };
   $('#entry').onsubmit = ev => {
     ev.preventDefault();
     const v = input.value.trim(); if (!v) return; const n = v.toLowerCase();
@@ -501,7 +503,7 @@ function drillBridge(mode){
     <form class="entry" id="entry" autocomplete="off"><label for="link-in" class="sr">A shared trait</label><input class="input" id="link-in" maxlength="200" placeholder="Both…"><button class="btn primary">Add</button></form>
     <div class="row end"><button class="btn primary" id="done" disabled>Finish</button></div>`;
   startClock($('#clock'), st.t0);
-  const input = $('#link-in'); input.focus();
+  const input = $('#link-in'); softFocus(input);
   function draw(){
     $('#dots').innerHTML = dots(Math.min(st.links.length, 5), 5);
     $('#links').innerHTML = st.links.map((l, i) => `<li><span class="t">${esc(l)}</span><button class="x" data-rm="${i}" aria-label="Remove">✕</button></li>`).join('');
@@ -510,8 +512,8 @@ function drillBridge(mode){
     const r = $('#reroll'); if (r) r.hidden = st.links.length > 0;
   }
   draw();
-  const r = $('#reroll'); if (r) r.onclick = () => { [st.a, st.b] = shuffle(pool); $('#pair').innerHTML = pairHTML(); input.focus(); };
-  $('#angle-btn').onclick = () => { st.ap = (st.ap + 1) % st.angles.length; $('#angle-q').textContent = st.angles[st.ap]; $('#angle-btn').textContent = 'Another hint'; input.focus(); };
+  const r = $('#reroll'); if (r) r.onclick = () => { [st.a, st.b] = shuffle(pool); $('#pair').innerHTML = pairHTML(); softFocus(input); };
+  $('#angle-btn').onclick = () => { st.ap = (st.ap + 1) % st.angles.length; $('#angle-q').textContent = st.angles[st.ap]; $('#angle-btn').textContent = 'Another hint'; softFocus(input); };
   $('#entry').onsubmit = ev => { ev.preventDefault(); const v = input.value.trim(); if (!v) return; st.links.push(v); input.value = ''; World.spark('bridge'); draw(); input.focus(); };
   $('#links').onclick = ev => { const b = ev.target.closest('[data-rm]'); if (b) { st.links.splice(+b.dataset.rm, 1); draw(); } };
   $('#done').onclick = () => {
@@ -670,7 +672,7 @@ function scrNotes(p){
   $('#file').innerHTML = `<div class="panel"><p class="eyebrow">Your collection</p><h3>${N.length ? plural(N.length, 'thing') + ' noticed' : 'Nothing yet'}</h3>
     ${top.length ? `<p class="small">What catches you most</p><div class="tally">${top.map(([m, c]) => `<div class="bar"><span>${esc(m)}</span><span class="track"><span class="fill" style="width:${c / max * 100}%"></span></span><span class="v">${c}</span></div>`).join('')}</div>` : '<p class="help">Add one whenever something grabs you, even outside the app.</p>'}</div>
     ${N.length ? N.slice(0, 8).map(n => card(n)).join('') : card(ex, true)}`;
-  $('#n-what').focus({preventScroll:true});
+  softFocus($('#n-what'));
 }
 
 /* ================= GALLERY ================= */

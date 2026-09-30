@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 for skin in cosmos paper; do
   {
     head -n 1 src/$skin.head.html
-    printf '<style>\n'; cat src/base.css; printf '</style>\n'
+    printf '<style>\n'; cat src/base.css; [ -f src/mobile.css ] && cat src/mobile.css; printf '</style>\n'
     tail -n +2 src/$skin.head.html
     printf '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>\n'
     printf '<script>\n'; cat src/$skin.world.js; printf '</script>\n'

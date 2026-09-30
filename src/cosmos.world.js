@@ -79,7 +79,7 @@ window.World = (() => {
     canvasEl = canvas; labelsEl = labels; onPick = cb.onPick;
     if (!T) return false;
     try { R = new T.WebGLRenderer({canvas, antialias:true, alpha:false}); } catch (e) { return false; }
-    R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.setClearColor(0x05060D, 1);
+    R.setPixelRatio(Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1.6 : 2)); R.setClearColor(0x05060D, 1);
     scene = new T.Scene(); scene.fog = new T.FogExp2(0x05060D, .025);
     camera = new T.PerspectiveCamera(50, 1, .05, 400);
     world = new T.Group(); scene.add(world);
@@ -109,16 +109,26 @@ window.World = (() => {
     const size = () => { const w = innerWidth, h = innerHeight; R.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
     size(); addEventListener('resize', size);
 
-    let down = null;
-    canvas.addEventListener('pointerdown', e => { down = {x:e.clientX, y:e.clientY, yaw:tyaw, pitch:tpitch, moved:false}; try { canvas.setPointerCapture(e.pointerId); } catch (_) {} });
+    let down = null, pinch = null;
+    const pts = new Map();
+    const gap = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+    canvas.addEventListener('pointerdown', e => {
+      pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      if (pts.size === 2 && view === 'world') { pinch = {d:gap(), zoom}; if (down) down.moved = true; focusId = null; return; }
+      down = {x:e.clientX, y:e.clientY, yaw:tyaw, pitch:tpitch, moved:false};
+    });
     canvas.addEventListener('pointermove', e => {
-      px = e.clientX / innerWidth * 2 - 1; py = -(e.clientY / innerHeight * 2 - 1);
+      if (pts.has(e.pointerId)) pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      if (pinch && pts.size === 2) { zoom = clamp(pinch.zoom * pinch.d / Math.max(20, gap()), .45, 1.8); return; }
+      if (e.pointerType === 'mouse') { px = e.clientX / innerWidth * 2 - 1; py = -(e.clientY / innerHeight * 2 - 1); }
       if (!down) return; const dx = e.clientX - down.x, dy = e.clientY - down.y;
-      if (Math.hypot(dx, dy) > 6) { down.moved = true; focusId = null; }
+      if (Math.hypot(dx, dy) > 8) { down.moved = true; focusId = null; }
       if (down.moved && view === 'world') { tyaw = down.yaw + dx * .006; tpitch = clamp(down.pitch + dy * .003, -.3, .45); }
     });
-    canvas.addEventListener('pointerup', e => { if (down && !down.moved) tap(e); down = null; });
-    canvas.addEventListener('pointercancel', () => { down = null; });
+    const lift = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) down = null; };
+    canvas.addEventListener('pointerup', e => { if (down && !down.moved && !pinch && pts.size === 1) tap(e); lift(e); });
+    canvas.addEventListener('pointercancel', lift);
     canvas.addEventListener('wheel', e => { if (view !== 'world') return; e.preventDefault(); zoom = clamp(zoom * (1 + e.deltaY * .001), .45, 1.8); }, {passive:false});
 
     let last = performance.now();

@@ -244,7 +244,110 @@ body[data-screen="reveal"] #veil{opacity:.55}
 .linkish{background:none;border:0;padding:0;color:var(--ink-2);text-decoration:underline;font-size:.9rem}
 
 .star-label{position:absolute;left:0;top:0;transform:translate(-50%,-150%);white-space:nowrap;font-family:var(--display);font-size:.9rem;color:var(--ink);text-shadow:0 1px 8px rgba(0,0,0,.8);transition:opacity .3s;pointer-events:none}
+/* ================= mobile-first layer =================
+   Loaded after base.css. Touch rules apply everywhere; layout rules kick in on phone widths. */
+html{-webkit-text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button,.chip,.btn,summary,.idea-card.mini{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.input,textarea{font-size:max(16px,1.05rem)} /* 16px+ stops iOS zooming into fields */
+@media (hover:none){
+  .tilt{transform:none!important}
+  .idea-card.mini:hover{transform:none}
+}
+
+@media (max-width:640px){
+  #ui{padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 96px)}
+  body.focus #ui{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+  .page{gap:14px}
+  h1{font-size:1.95rem;line-height:1.08}
+  h2{font-size:1.5rem}
+  h3{font-size:1.15rem}
+  .help{font-size:.95rem}
+  .panel{padding:16px;border-radius:calc(var(--radius) - 2px)}
+
+  /* touch targets */
+  .btn{min-height:48px;padding:12px 18px}
+  .btn.sm{min-height:40px;padding:8px 14px}
+  .chip{padding:9px 14px;min-height:40px}
+  .x{min-width:36px;min-height:36px}
+  .word button{width:1.9em;height:1.9em}
+
+  /* main actions go full width and stack */
+  .panel .row > .btn.primary,.result .row > .btn,.reveal .row > .btn,.modal-card .row > .btn{flex:1 1 100%}
+  .row > .btn.ghost{flex:1 1 auto}
+
+  /* tab bar: full-width dock above the home indicator */
+  .tabbar{left:10px;right:10px;transform:none;max-width:none;justify-content:space-around;bottom:calc(env(safe-area-inset-bottom,0px) + 8px);padding:6px 4px}
+  .tabbar button{flex:1;min-width:0;min-height:52px;padding:6px 2px;font-size:.68rem}
+  .tabbar button svg{width:22px;height:22px}
+  body.focus .tabbar,body.cine .tabbar{transform:translateY(24px)}
+
+  /* galaxy home */
+  .brand{font-size:1.3rem}
+  .brand svg{width:26px;height:26px}
+  .w-top .stat{font-size:.7rem;padding:3px 9px}
+  .w-card h2{font-size:1.35rem}
+  .w-card{gap:10px}
+  .w-hint{font-size:.7rem}
+
+  /* bottom sheets instead of centred dialogs */
+  .intro-wrap,.modal{place-items:end center;padding:40px 0 0}
+  .intro,.modal-card{max-width:none;border-radius:22px 22px 0 0}
+  .intro{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 22px)}
+  .modal-card{max-height:calc(100dvh - 40px);overflow-y:auto;overscroll-behavior:contain;padding:14px 12px calc(env(safe-area-inset-bottom,0px) + 16px);background:var(--bg);border-top:var(--panel-border)}
+  @media (prefers-reduced-motion:no-preference){
+    .intro,.modal-card{animation:sheetUp .6s cubic-bezier(.2,.8,.2,1) both}
+    @keyframes sheetUp{from{transform:translateY(40px);opacity:0}}
+  }
+
+  /* today */
+  .step{display:grid;grid-template-columns:34px 1fr;gap:6px 12px;align-items:start;padding:14px}
+  .step .btn,.step .stat{grid-column:2;justify-self:start;margin-left:0}
+  .step .btn{min-width:120px}
+
+  /* games */
+  .d-head{gap:8px}
+  .field{min-height:200px;padding:18px 10px}
+  .cloud{min-height:170px;gap:14px 10px}
+  .field .word{font-size:1rem!important}
+  .stage .entry{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);z-index:4;padding:8px;margin:0 -8px;border-radius:calc(var(--radius-sm) + 6px);background:var(--bg);box-shadow:0 -12px 30px -12px rgba(0,0,0,.8)}
+  .entry .btn{min-width:72px}
+  .pair{grid-template-columns:1fr;gap:6px}
+  .pair .side{padding:16px 12px}
+  .pair .x-mark{justify-self:center}
+  .angle q{font-size:1.05rem}
+  .result{justify-items:center;text-align:center;gap:18px}
+  .result .row{justify-content:center}
+  .stamp{width:120px;height:120px}
+  .stamp b{font-size:2.6rem}
+
+  /* create */
+  .forge-bar{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);flex-direction:column;align-items:stretch;gap:8px;text-align:center}
+  .forge-bar .btn{width:100%}
+  .forge-bar .count{flex:none}
+
+  /* idea cards */
+  .ic-body{padding:16px}
+  .idea-card h2{font-size:1.6rem}
+  .cards{grid-template-columns:1fr}
+
+  /* you */
+  .statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .statgrid b{font-size:1.5rem}
+  .ring svg,.ring-wrap{width:80px!important;height:80px!important}
+  .unlocks li{display:grid;grid-template-columns:30px 1fr;gap:6px 12px}
+  .unlocks li .stat{grid-column:2;justify-self:start;white-space:normal}
+}
+
+/* keep the tab bar out of the way while the welcome sheet is open */
+body:has(.intro-wrap) .tabbar{opacity:0;pointer-events:none}
 </style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05060D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sidestep">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600;700&display=swap">
@@ -402,7 +505,7 @@ window.World = (() => {
     canvasEl = canvas; labelsEl = labels; onPick = cb.onPick;
     if (!T) return false;
     try { R = new T.WebGLRenderer({canvas, antialias:true, alpha:false}); } catch (e) { return false; }
-    R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.setClearColor(0x05060D, 1);
+    R.setPixelRatio(Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1.6 : 2)); R.setClearColor(0x05060D, 1);
     scene = new T.Scene(); scene.fog = new T.FogExp2(0x05060D, .025);
     camera = new T.PerspectiveCamera(50, 1, .05, 400);
     world = new T.Group(); scene.add(world);
@@ -432,16 +535,26 @@ window.World = (() => {
     const size = () => { const w = innerWidth, h = innerHeight; R.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
     size(); addEventListener('resize', size);
 
-    let down = null;
-    canvas.addEventListener('pointerdown', e => { down = {x:e.clientX, y:e.clientY, yaw:tyaw, pitch:tpitch, moved:false}; try { canvas.setPointerCapture(e.pointerId); } catch (_) {} });
+    let down = null, pinch = null;
+    const pts = new Map();
+    const gap = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+    canvas.addEventListener('pointerdown', e => {
+      pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      if (pts.size === 2 && view === 'world') { pinch = {d:gap(), zoom}; if (down) down.moved = true; focusId = null; return; }
+      down = {x:e.clientX, y:e.clientY, yaw:tyaw, pitch:tpitch, moved:false};
+    });
     canvas.addEventListener('pointermove', e => {
-      px = e.clientX / innerWidth * 2 - 1; py = -(e.clientY / innerHeight * 2 - 1);
+      if (pts.has(e.pointerId)) pts.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      if (pinch && pts.size === 2) { zoom = clamp(pinch.zoom * pinch.d / Math.max(20, gap()), .45, 1.8); return; }
+      if (e.pointerType === 'mouse') { px = e.clientX / innerWidth * 2 - 1; py = -(e.clientY / innerHeight * 2 - 1); }
       if (!down) return; const dx = e.clientX - down.x, dy = e.clientY - down.y;
-      if (Math.hypot(dx, dy) > 6) { down.moved = true; focusId = null; }
+      if (Math.hypot(dx, dy) > 8) { down.moved = true; focusId = null; }
       if (down.moved && view === 'world') { tyaw = down.yaw + dx * .006; tpitch = clamp(down.pitch + dy * .003, -.3, .45); }
     });
-    canvas.addEventListener('pointerup', e => { if (down && !down.moved) tap(e); down = null; });
-    canvas.addEventListener('pointercancel', () => { down = null; });
+    const lift = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) down = null; };
+    canvas.addEventListener('pointerup', e => { if (down && !down.moved && !pinch && pts.size === 1) tap(e); lift(e); });
+    canvas.addEventListener('pointercancel', lift);
     canvas.addEventListener('wheel', e => { if (view !== 'world') return; e.preventDefault(); zoom = clamp(zoom * (1 + e.deltaY * .001), .45, 1.8); }, {passive:false});
 
     let last = performance.now();
@@ -759,6 +872,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const touchUI = matchMedia('(hover: none) and (pointer: coarse)').matches;
+const softFocus = el => { if (el && !touchUI) el.focus({preventScroll:true}); };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const fmt = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -1055,7 +1170,7 @@ function drillFar(mode){
     <form class="entry" id="entry" autocomplete="off"><label for="far-in" class="sr">Next word</label><input class="input" id="far-in" maxlength="28" placeholder="Type a word and press Enter"><button class="btn primary" id="far-add">Add</button></form>
     <div class="row"><p class="small grow">We only catch obvious pairs, like sun and moon. You decide the rest.</p><button class="btn primary" id="far-done" disabled>Finish</button></div>`;
   startClock($('#clock'), st.t0);
-  const input = $('#far-in'); input.focus();
+  const input = $('#far-in'); softFocus(input);
   const all = () => anchor ? [anchor, ...st.words] : st.words;
   const pairs = () => { const a = all(), out = []; for (let i = 0; i < a.length; i++) for (let j = i + 1; j < a.length; j++) { const r = relate(a[i], a[j]); if (r) out.push([i, j, r]); } return out; };
   function lines(){
@@ -1089,7 +1204,7 @@ function drillFar(mode){
     st.meta[w] = {c:st.words.length % 4 + 1, rot:(Math.random() * 8 - 4).toFixed(1), size:(1.05 + Math.random() * .55).toFixed(2), dy:Math.round(Math.random() * 20 - 10)};
     st.words.push(w); input.value = ''; World.spark('far'); draw(w); if (!input.disabled) input.focus();
   };
-  $('#cloud').onclick = ev => { const b = ev.target.closest('[data-rm]'); if (!b) return; st.words.splice(+b.dataset.rm, 1); draw(); input.focus(); };
+  $('#cloud').onclick = ev => { const b = ev.target.closest('[data-rm]'); if (!b) return; st.words.splice(+b.dataset.rm, 1); draw(); softFocus(input); };
   $('#far-done').onclick = () => {
     const near = pairs().length, words = st.words.slice();
     addSparks(words, 'far', mode === 'daily');
@@ -1111,15 +1226,15 @@ function drillSecond(mode){
     <ol class="uses" id="uses"></ol>
     <form class="entry" id="entry" autocomplete="off"><label for="use-in" class="sr">A new use</label><input class="input" id="use-in" maxlength="120" placeholder="Use it as…"><button class="btn primary">Add</button></form>
     <div class="row end"><button class="btn primary" id="done" disabled>Finish</button></div>`;
-  const input = $('#use-in'); input.focus();
+  const input = $('#use-in'); softFocus(input);
   startClock($('#clock'), st.t0, () => { const b = $('#lens-btn'); if (b) b.classList.toggle('pulse', Date.now() - st.last > 20000); });
   function drawLens(){
     const slot = $('#lens-slot');
     if (!st.lens) { slot.innerHTML = `<button class="btn" id="lens-btn">Stuck? Get a hint</button>`; $('#lens-btn').onclick = nextLens; return; }
     slot.innerHTML = `<div class="lens" aria-live="polite"><span class="eyebrow" style="color:inherit;opacity:.8">Hint</span><b>${esc(st.lens[0])}</b><span>${esc(st.lens[1])}</span><div class="row"><button class="btn sm" id="lens-next">Another hint</button><button class="btn sm" id="lens-off">Hide hint</button></div></div>`;
-    $('#lens-next').onclick = nextLens; $('#lens-off').onclick = () => { st.lens = null; drawLens(); input.focus(); };
+    $('#lens-next').onclick = nextLens; $('#lens-off').onclick = () => { st.lens = null; drawLens(); softFocus(input); };
   }
-  function nextLens(){ st.lens = st.deck[st.lp++ % st.deck.length]; st.last = Date.now(); drawLens(); input.focus(); }
+  function nextLens(){ st.lens = st.deck[st.lp++ % st.deck.length]; st.last = Date.now(); drawLens(); softFocus(input); }
   function draw(){
     $('#dots').innerHTML = dots(Math.min(st.uses.length, 10), 10);
     $('#uses').innerHTML = st.uses.map((u, i) => `<li><span class="n">${i + 1}</span><span class="t">${esc(u.text)}</span>${u.lens ? '<span class="tag">hint</span>' : ''}<button class="x" data-rm="${i}" aria-label="Remove">✕</button></li>`).join('');
@@ -1129,7 +1244,7 @@ function drillSecond(mode){
   }
   draw(); drawLens();
   const r = $('#reroll');
-  if (r) r.onclick = () => { let o; do { o = pick(pool); } while (o === st.obj); st.obj = o; $('#obj-name').textContent = o[0]; $('#usually').innerHTML = `Usually used for <s>${esc(o[1])}</s>. What else could it do?`; input.focus(); };
+  if (r) r.onclick = () => { let o; do { o = pick(pool); } while (o === st.obj); st.obj = o; $('#obj-name').textContent = o[0]; $('#usually').innerHTML = `Usually used for <s>${esc(o[1])}</s>. What else could it do?`; softFocus(input); };
   $('#entry').onsubmit = ev => {
     ev.preventDefault();
     const v = input.value.trim(); if (!v) return; const n = v.toLowerCase();
@@ -1164,7 +1279,7 @@ function drillBridge(mode){
     <form class="entry" id="entry" autocomplete="off"><label for="link-in" class="sr">A shared trait</label><input class="input" id="link-in" maxlength="200" placeholder="Both…"><button class="btn primary">Add</button></form>
     <div class="row end"><button class="btn primary" id="done" disabled>Finish</button></div>`;
   startClock($('#clock'), st.t0);
-  const input = $('#link-in'); input.focus();
+  const input = $('#link-in'); softFocus(input);
   function draw(){
     $('#dots').innerHTML = dots(Math.min(st.links.length, 5), 5);
     $('#links').innerHTML = st.links.map((l, i) => `<li><span class="t">${esc(l)}</span><button class="x" data-rm="${i}" aria-label="Remove">✕</button></li>`).join('');
@@ -1173,8 +1288,8 @@ function drillBridge(mode){
     const r = $('#reroll'); if (r) r.hidden = st.links.length > 0;
   }
   draw();
-  const r = $('#reroll'); if (r) r.onclick = () => { [st.a, st.b] = shuffle(pool); $('#pair').innerHTML = pairHTML(); input.focus(); };
-  $('#angle-btn').onclick = () => { st.ap = (st.ap + 1) % st.angles.length; $('#angle-q').textContent = st.angles[st.ap]; $('#angle-btn').textContent = 'Another hint'; input.focus(); };
+  const r = $('#reroll'); if (r) r.onclick = () => { [st.a, st.b] = shuffle(pool); $('#pair').innerHTML = pairHTML(); softFocus(input); };
+  $('#angle-btn').onclick = () => { st.ap = (st.ap + 1) % st.angles.length; $('#angle-q').textContent = st.angles[st.ap]; $('#angle-btn').textContent = 'Another hint'; softFocus(input); };
   $('#entry').onsubmit = ev => { ev.preventDefault(); const v = input.value.trim(); if (!v) return; st.links.push(v); input.value = ''; World.spark('bridge'); draw(); input.focus(); };
   $('#links').onclick = ev => { const b = ev.target.closest('[data-rm]'); if (b) { st.links.splice(+b.dataset.rm, 1); draw(); } };
   $('#done').onclick = () => {
@@ -1333,7 +1448,7 @@ function scrNotes(p){
   $('#file').innerHTML = `<div class="panel"><p class="eyebrow">Your collection</p><h3>${N.length ? plural(N.length, 'thing') + ' noticed' : 'Nothing yet'}</h3>
     ${top.length ? `<p class="small">What catches you most</p><div class="tally">${top.map(([m, c]) => `<div class="bar"><span>${esc(m)}</span><span class="track"><span class="fill" style="width:${c / max * 100}%"></span></span><span class="v">${c}</span></div>`).join('')}</div>` : '<p class="help">Add one whenever something grabs you, even outside the app.</p>'}</div>
     ${N.length ? N.slice(0, 8).map(n => card(n)).join('') : card(ex, true)}`;
-  $('#n-what').focus({preventScroll:true});
+  softFocus($('#n-what'));
 }
 
 /* ================= GALLERY ================= */
